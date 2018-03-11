@@ -9,4 +9,8 @@
     {"caption": "github: blame", "command": "git_hub_blame"},
     {"caption": "github: history", "command": "git_hub_history"},
     {"caption": "json: prettify", "command": "json_prettify"},
+    {"caption": "flake8: file", "command": "flake8_file"},
+    {"caption": "flake8: project", "command": "flake8_project"},
+    {"caption": "mypy: file", "command": "mypy_file"},
+    {"caption": "mypy: project", "command": "mypy_project"},
 ]
