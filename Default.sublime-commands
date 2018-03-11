@@ -8,4 +8,5 @@
     {"caption": "github: blob", "command": "git_hub_blob"},
     {"caption": "github: blame", "command": "git_hub_blame"},
     {"caption": "github: history", "command": "git_hub_history"},
+    {"caption": "json: prettify", "command": "json_prettify"},
 ]
