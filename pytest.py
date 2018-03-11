@@ -2,9 +2,7 @@ import ast
 
 import sublime_plugin
 
-from .utils import (
-    get_line_no, get_buffer, run, get_cwd,
-)
+from .utils import get_line_no, get_buffer, run
 
 
 last_args = []
@@ -77,16 +75,15 @@ def get_test_function_name(code, line_no):
     return func_node.name
 
 
-def get_project_root(cwd):
-    return run(['pipenv', '--where'], cwd=cwd)
+def get_project_root():
+    return run(['pipenv', '--where'])
 
 
 def run_pytest(view, args=[]):
     global last_args
     last_args = args
 
-    cwd = get_cwd()
-    project_root = get_project_root(cwd)
+    project_root = get_project_root()
 
     command = ['pipenv', 'run', 'pytest', '-v'] + args
     view.window().run_command('exec', {
