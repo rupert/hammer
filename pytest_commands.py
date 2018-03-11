@@ -27,7 +27,7 @@ class PytestFileCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         test_file_name = self.view.file_name()
 
-        if test_file_name is None:
+        if not test_file_name:
             return
 
         run_pytest(self.view, [test_file_name])
@@ -37,7 +37,7 @@ class PytestFunctionCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         test_file_name = self.view.file_name()
 
-        if test_file_name is None:
+        if not test_file_name:
             return
 
         line_no = get_line_no(self.view)
