@@ -48,7 +48,6 @@ def open_history(view):
     url = 'https://github.com/{repo}/commits/{commit}/{file_name}'.format(
         repo=repo, commit=commit, file_name=file_name,
     )
-
     webbrowser.open(url)
 
 
@@ -66,23 +65,14 @@ def open_file(view, action):
     if not file_name:
         return
 
-    line_no_begin, line_no_end = get_selected_line_nos(view)
-
-    if line_no_begin == line_no_end:
-        line_no = 'L{begin}'.format(begin=line_no_begin)
-    else:
-        line_no = 'L{begin}-L{end}'.format(
-            begin=line_no_begin, end=line_no_end,
-        )
-
     repo = get_github_repo()
     commit = get_git_commit()
+    line_no = get_line_no_fragment(view)
 
     url = 'https://github.com/{repo}/{action}/{commit}/{file_name}#{line_no}'.format(  # noqa
         repo=repo, commit=commit, file_name=file_name, line_no=line_no,
         action=action,
     )
-
     webbrowser.open(url)
 
 
@@ -109,3 +99,15 @@ def get_file_name(view):
     git_root = get_git_root()
     return os.path.relpath(file_name, git_root)
 
+
+def get_line_no_fragment(view):
+    line_no_begin, line_no_end = get_selected_line_nos(view)
+
+    if line_no_begin == line_no_end:
+        fragment = 'L{begin}'.format(begin=line_no_begin)
+    else:
+        fragment = 'L{begin}-L{end}'.format(
+            begin=line_no_begin, end=line_no_end,
+        )
+
+    return fragment
