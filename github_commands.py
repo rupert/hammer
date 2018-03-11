@@ -86,7 +86,7 @@ def get_git_commit():
 
 def get_github_repo():
     url = run(['git', 'config', '--get', 'remote.origin.url'])
-    match = re.search('github.com/([^/]+/[^/]+)', url)
+    match = re.search('github.com/([^/]+/[^/]+)', url)  # TODO remove .git
     return match.group(1)
 
 
