@@ -25,4 +25,6 @@ class JsonPrettifyCommand(sublime_plugin.TextCommand):
             self.view.replace(edit, region, data)
 
             if select_all:
-                self.view.set_syntax_file('Packages/JavaScript/JSON.tmLanguage')
+                self.view.set_syntax_file(
+                    'Packages/JavaScript/JSON.tmLanguage'
+                )
