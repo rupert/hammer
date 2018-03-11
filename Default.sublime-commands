@@ -4,6 +4,7 @@
     {"caption": "pytest: file", "command": "pytest_file"},
     {"caption": "pytest: last failed", "command": "pytest_last_failed"},
     {"caption": "pytest: re-run", "command": "pytest_re_run"},
+    {"caption": "github: tree", "command": "git_hub_tree"},
     {"caption": "github: blob", "command": "git_hub_blob"},
     {"caption": "github: blame", "command": "git_hub_blame"},
     {"caption": "github: history", "command": "git_hub_history"},

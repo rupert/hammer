@@ -7,23 +7,62 @@ import sublime_plugin
 from .utils import run, get_cwd, get_selected_line_nos
 
 
+class GitHubTreeCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        open_tree(self.view)
+
+
 class GitHubBlobCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        open_in_github(self.view, 'blob')
+        open_blob(self.view)
 
 
 class GitHubBlameCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        open_in_github(self.view, 'blame')
+        open_blame(self.view)
 
 
 class GitHubHistoryCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        # TODO refactor to remove line number fragment
-        open_in_github(self.view, 'commits')
+        open_history(self.view)
 
 
-def open_in_github(view, action):
+def open_tree(view):
+    cwd = get_cwd()
+    repo = get_github_repo(cwd)
+    commit = get_git_commit(cwd)
+    url = 'https://github.com/{repo}/tree/{commit}'.format(  # noqa
+        repo=repo, commit=commit,
+    )
+    webbrowser.open(url)
+
+
+def open_history(view):
+    file_name = view.file_name()
+
+    if not file_name:
+        return
+
+    path = os.path.relpath(file_name, git_root)
+    repo = get_github_repo(cwd)
+    commit = get_git_commit(cwd)
+
+    url = 'https://github.com/{repo}/commits/{commit}/{path}'.format(  # noqa
+        repo=repo, commit=commit, path=path,
+    )
+
+    webbrowser.open(url)
+
+
+def open_blame(view):
+    open_file(view, 'blame')
+
+
+def open_blob(view):
+    open_file(view, 'blob')
+
+
+def open_file(view, action):
     file_name = view.file_name()
 
     if not file_name:
