@@ -19,8 +19,11 @@ def get_buffer(view):
     return view.substr(sublime.Region(0, view.size()))
 
 
-def run(*args, **kwargs):
-    output = subprocess.check_output(*args, **kwargs)
+def run(command, cwd=None):
+    if cwd is None:
+        cwd = get_cwd()
+
+    output = subprocess.check_output(command, cwd=cwd)
     output = output.decode('utf-8')
     output = output.strip()
     return output

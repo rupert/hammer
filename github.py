@@ -4,7 +4,7 @@ import webbrowser
 
 import sublime_plugin
 
-from .utils import run, get_cwd, get_selected_line_nos
+from .utils import run, get_selected_line_nos
 
 
 class GitHubTreeCommand(sublime_plugin.TextCommand):
@@ -28,9 +28,8 @@ class GitHubHistoryCommand(sublime_plugin.TextCommand):
 
 
 def open_tree(view):
-    cwd = get_cwd()
-    repo = get_github_repo(cwd)
-    commit = get_git_commit(cwd)
+    repo = get_github_repo()
+    commit = get_git_commit()
     url = 'https://github.com/{repo}/tree/{commit}'.format(  # noqa
         repo=repo, commit=commit,
     )
@@ -38,17 +37,16 @@ def open_tree(view):
 
 
 def open_history(view):
-    file_name = view.file_name()
+    file_name = get_file_name(view)
 
     if not file_name:
         return
 
-    path = os.path.relpath(file_name, git_root)
-    repo = get_github_repo(cwd)
-    commit = get_git_commit(cwd)
+    repo = get_github_repo()
+    commit = get_git_commit()
 
-    url = 'https://github.com/{repo}/commits/{commit}/{path}'.format(  # noqa
-        repo=repo, commit=commit, path=path,
+    url = 'https://github.com/{repo}/commits/{commit}/{file_name}'.format(
+        repo=repo, commit=commit, file_name=file_name,
     )
 
     webbrowser.open(url)
@@ -63,16 +61,10 @@ def open_blob(view):
 
 
 def open_file(view, action):
-    file_name = view.file_name()
+    file_name = get_file_name(view)
 
     if not file_name:
         return
-
-    cwd = get_cwd()
-
-    git_root = get_git_root(cwd)
-
-    path = os.path.relpath(file_name, git_root)
 
     line_no_begin, line_no_end = get_selected_line_nos(view)
 
@@ -83,25 +75,37 @@ def open_file(view, action):
             begin=line_no_begin, end=line_no_end,
         )
 
-    repo = get_github_repo(cwd)
-    commit = get_git_commit(cwd)
+    repo = get_github_repo()
+    commit = get_git_commit()
 
-    url = 'https://github.com/{repo}/{action}/{commit}/{path}#{line_no}'.format(  # noqa
-        repo=repo, commit=commit, path=path, line_no=line_no, action=action,
+    url = 'https://github.com/{repo}/{action}/{commit}/{file_name}#{line_no}'.format(  # noqa
+        repo=repo, commit=commit, file_name=file_name, line_no=line_no,
+        action=action,
     )
 
     webbrowser.open(url)
 
 
-def get_git_root(cwd):
-    return run(['git', 'rev-parse', '--show-toplevel'], cwd=cwd)
+def get_git_root():
+    return run(['git', 'rev-parse', '--show-toplevel'])
 
 
-def get_git_commit(cwd):
-    return run(['git', 'rev-parse', '--verify', 'HEAD'], cwd=cwd)
+def get_git_commit():
+    return run(['git', 'rev-parse', '--verify', 'HEAD'])
 
 
-def get_github_repo(cwd):
-    url = run(['git', 'config', '--get', 'remote.origin.url'], cwd=cwd)
+def get_github_repo():
+    url = run(['git', 'config', '--get', 'remote.origin.url'])
     match = re.search('github.com/([^/]+/[^/]+)', url)
     return match.group(1)
+
+
+def get_file_name(view):
+    file_name = view.file_name()
+
+    if not file_name:
+        return None
+
+    git_root = get_git_root()
+    return os.path.relpath(file_name, git_root)
+
