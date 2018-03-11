@@ -1,0 +1,9 @@
+[
+    {"caption": "pytest: suite", "command": "pytest_suite"},
+    {"caption": "pytest: function", "command": "pytest_function"},
+    {"caption": "pytest: file", "command": "pytest_file"},
+    {"caption": "pytest: last failed", "command": "pytest_last_failed"},
+    {"caption": "pytest: re-run", "command": "pytest_re_run"},
+    {"caption": "github: blob", "command": "git_hub_blob"},
+    {"caption": "github: blame", "command": "git_hub_blame"}
+]
