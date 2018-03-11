@@ -17,13 +17,19 @@ class GitHubBlameCommand(sublime_plugin.TextCommand):
         open_in_github(self.view, 'blame')
 
 
+class GitHubHistoryCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        # TODO refactor to remove line number fragment
+        open_in_github(self.view, 'commits')
+
+
 def open_in_github(view, action):
     file_name = view.file_name()
 
     if not file_name:
         return
 
-    cwd = get_cwd(view)
+    cwd = get_cwd()
 
     git_root = get_git_root(cwd)
 

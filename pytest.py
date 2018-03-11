@@ -3,7 +3,7 @@ import ast
 import sublime_plugin
 
 from .utils import (
-    get_line_number, get_buffer, run, get_cwd,
+    get_line_no, get_buffer, run, get_cwd,
 )
 
 
@@ -42,7 +42,7 @@ class PytestFunctionCommand(sublime_plugin.TextCommand):
         if test_file_name is None:
             return
 
-        line_no = get_line_number(self.view)
+        line_no = get_line_no(self.view)
         code = get_buffer(self.view)
         test_function_name = get_test_function_name(code, line_no)
 
@@ -85,7 +85,7 @@ def run_pytest(view, args=[]):
     global last_args
     last_args = args
 
-    cwd = get_cwd(view)
+    cwd = get_cwd()
     project_root = get_project_root(cwd)
 
     command = ['pipenv', 'run', 'pytest', '-v'] + args

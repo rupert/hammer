@@ -26,10 +26,19 @@ def run(*args, **kwargs):
     return output
 
 
-def get_cwd(view):
-    file_name = view.file_name()
+def get_cwd():
+    window = sublime.active_window()
+    view = window.active_view()
 
-    if not file_name:
-        return ''
+    if view:
+        file_name = view.file_name()
 
-    return os.path.dirname(file_name)
+        if file_name:
+            return os.path.dirname(file_name)
+
+    folders = window.folders()
+
+    if len(folders) > 0:
+        return folders[0]
+    else:
+        return os.path.expanduser('~')
